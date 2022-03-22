@@ -5,41 +5,38 @@ ThisBuild / autoScalaLibrary := false
 ThisBuild / versionScheme := Some("semver-spec")
 ThisBuild / homepage :=  Some(url("https://scalismo.org"))
 ThisBuild / licenses += ("Apache-2.0", url("http://www.apache.org/licenses/LICENSE-2.0"))
-ThisBuild / scmInfo := Some(
-      ScmInfo(url("https://github.com/unibas-gravis/hdf5-java-natives"), "git@github.com:unibas-gravis/hdf5-java-natives.git")
-    )
+
 ThisBuild / developers := List(
       Developer("marcelluethi", "marcelluethi", "marcel.luethi@unibas.ch", url("https://github.com/marcelluethi"))
     )
 ThisBuild / publishMavenStyle := true
 ThisBuild / publishTo := Some(Opts.resolver.sonatypeSnapshots)
 
-
 /*
- * dummy package to manage hdf5.jar
+ * dummy package to manage itk.jar
  */   
-lazy val hdf5Jar = (project in file("hdf5Jar"))
+lazy val itkJar = (project in file("itkJar"))
     .settings(
-        name := "hdf5Jar",
-        Compile / packageBin := baseDirectory.value / "lib"/ "jhdf.jar"
+        name := "itkJar",
+        Compile / packageBin := baseDirectory.value / "lib"/ "simpleitk-2.2.0rc2.post35-g8c184.jar"
     )
 
 /*
  * Module definition and library loading logic. Does not contain any native libraries
  */
-lazy val hdf5JavaNatives = (project in file("hdf5nativelibs"))
-.dependsOn(hdf5Jar)
-.aggregate(hdf5Jar)
+lazy val itkJavaLibraries = (project in file("itknativelibs"))
+.dependsOn(itkJar)
+.aggregate(itkJar)
 .settings(
-    javacOptions ++= Seq("--release", "8") 
+    javacOptions ++= Seq("--release", "8")
 )
 
 
 /*
- * Main module (only used for testing) 
- */ 
+ * Main module (only used for testing)
+ */
 lazy val root = (project in file("."))
-    .aggregate(hdf5JavaNatives)
-    .dependsOn(hdf5JavaNatives)
+    .aggregate(itkJavaLibraries)
+    .dependsOn(itkJavaLibraries)
 
 

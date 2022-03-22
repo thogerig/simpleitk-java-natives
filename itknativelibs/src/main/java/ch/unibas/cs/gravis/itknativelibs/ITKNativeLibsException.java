@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ch.unibas.cs.gravis.hdf5nativelibs;
+package ch.unibas.cs.gravis.itknativelibs;
 
 
-public class Hdf5NativeLibsException extends Exception {
+public class ITKNativeLibsException extends Exception {
   
-    public Hdf5NativeLibsException(String message) {
+    public ITKNativeLibsException(String message) {
         super(message);
     }
 
-    public Hdf5NativeLibsException(String message, Throwable cause) {
+    public ITKNativeLibsException(String message, Throwable cause) {
         super(message, cause);
     }
 }

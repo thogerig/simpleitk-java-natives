@@ -2,28 +2,30 @@ package main;
 
 import java.io.File;
 
-import ch.unibas.cs.gravis.hdf5nativelibs.*;
-import ncsa.hdf.object.*;
-import ncsa.hdf.object.h5.*;
+import ch.unibas.cs.gravis.itknativelibs.*;
+import org.itk.simple.Image;
+import org.itk.simple.SimpleITK;
 
 public class Main {
-    
-    
-
 
     public static void main(String[] args) {
 
         File nativeDir = new File(System.getProperty("user.home") + File.separator +".nativelibs");
         try {
-            Hdf5NativeLibs.initialize(nativeDir);
-        } catch (Hdf5NativeLibsException e) {
-            System.out.println("could not initialize hdf5 library. " +e.getMessage());
+            ITKNativeLibs.initialize(nativeDir);
+        } catch (ITKNativeLibsException e) {
+            System.out.println("could not initialize itk library. " +e.getMessage());
         }
+
+        System.out.println(System.getProperty("java.library.path"));
 
         try {
             // If these calls works, the library was properly loaded
-            FileFormat fileFormat = FileFormat.getFileFormat(FileFormat.FILE_TYPE_HDF5);
-            FileFormat h5file = fileFormat.createInstance("x.h5", FileFormat.READ);
+            // Grab a file
+            Image image = SimpleITK.readImage("/home/gerith00/Downloads/_R7B3351.JPG");
+            Image output = SimpleITK.discreteGaussian(image);
+            SimpleITK.writeImage(output, "dot.dcm");
+            System.out.println("Test");
         } catch (Exception e) {
             System.out.println("Something has gone wrong " +e.getMessage());
         }

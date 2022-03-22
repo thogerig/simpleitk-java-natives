@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ch.unibas.cs.gravis.hdf5nativelibs;
+package ch.unibas.cs.gravis.itknativelibs;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.lang.reflect.Field;
 
 
-public class Hdf5NativeLibs {
+public class ITKNativeLibs {
    
     public static final String MAJOR_VERSION = "0";
     public static final String MINOR_VERSION = "1";
@@ -31,15 +32,15 @@ public class Hdf5NativeLibs {
       *
       * @param nativeLibraryBaseDirectory A directory into which the nativelibs will be extracted
       */
-    public static void initialize(File nativeLibraryBaseDirectory) throws Hdf5NativeLibsException {        
+    public static void initialize(File nativeLibraryBaseDirectory) throws ITKNativeLibsException {
 
         String platform =  System.getProperty("os.name").trim().toLowerCase();
         File directory = Util.createNativeDirectory(nativeLibraryBaseDirectory);
-        String nativeName = System.mapLibraryName("jhdf5");
-        URL url = Hdf5NativeLibs.class.getResource(nativeName);
+        String nativeName = System.mapLibraryName("SimpleITKJava");
+        URL url = ITKNativeLibs.class.getResource(nativeName);
         
         if (url == null) {
-            throw new Hdf5NativeLibsException("Unable to load resource "
+            throw new ITKNativeLibsException("Unable to load resource "
                     + nativeName + " for platform " + platform);
         }
         
@@ -47,12 +48,17 @@ public class Hdf5NativeLibs {
         try {
             Util.copyUrlToFile(url, file);
         } catch (IOException e) {
-            throw new Hdf5NativeLibsException("Error while copying library " + nativeName, e);
+            throw new ITKNativeLibsException("Error while copying library " + nativeName, e);
         }
-        
-        Runtime.getRuntime().load(file.getAbsolutePath());
-     
-        System.setProperty("ncsa.hdf.hdf5lib.H5.hdf5lib", file.getAbsolutePath());
+
+        try
+        {
+            System.loadLibrary("SimpleITKJava");
+        }
+        catch(java.lang.UnsatisfiedLinkError e)
+        {
+            System.out.println("SimpleITKJava library not found in java library path. Please add -Djava.library.path=" + directory.getPath() + " to your VM options");
+        }
 
     }
 }

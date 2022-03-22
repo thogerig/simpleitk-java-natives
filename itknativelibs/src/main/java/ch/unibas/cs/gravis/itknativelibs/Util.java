@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package ch.unibas.cs.gravis.hdf5nativelibs;
+package ch.unibas.cs.gravis.itknativelibs;
 
-import static ch.unibas.cs.gravis.hdf5nativelibs.Hdf5NativeLibs.MAJOR_VERSION;
-import static ch.unibas.cs.gravis.hdf5nativelibs.Hdf5NativeLibs.MINOR_VERSION;
+import static ch.unibas.cs.gravis.itknativelibs.ITKNativeLibs.MAJOR_VERSION;
+import static ch.unibas.cs.gravis.itknativelibs.ITKNativeLibs.MINOR_VERSION;
 
 import java.io.*;
 import java.net.URL;
@@ -29,21 +29,21 @@ public class Util {
 	}
 
 
-	public static File createNativeDirectory(File nativeLibraryBaseDirectory) throws Hdf5NativeLibsException {
+	public static File createNativeDirectory(File nativeLibraryBaseDirectory) throws ITKNativeLibsException {
 
-		File nativeLibraryDirectory  = new File(nativeLibraryBaseDirectory, "hdf5nativelibs-" +MAJOR_VERSION + "." +MINOR_VERSION);
+		File nativeLibraryDirectory  = new File(nativeLibraryBaseDirectory, "itknativelibs-" +MAJOR_VERSION + "." +MINOR_VERSION);
 		try {
 			if (!nativeLibraryDirectory.exists()) {
 				nativeLibraryDirectory.mkdirs();
 			}
 		} catch (Throwable t) {
-			throw new Hdf5NativeLibsException(
+			throw new ITKNativeLibsException(
 					"Unable to create directory for native libs", t);
 		}
 		return nativeLibraryDirectory;
 	}
 
-	public static byte[] getDigest(URL url) throws Hdf5NativeLibsException, IOException {
+	public static byte[] getDigest(URL url) throws ITKNativeLibsException, IOException {
 		byte[] digest = null;
 
 		try {
@@ -60,13 +60,13 @@ public class Util {
 		}
 
 		catch (java.security.NoSuchAlgorithmException e) {
-			throw new Hdf5NativeLibsException("Error while computing MD5 hash for url " + url, e);
+			throw new ITKNativeLibsException("Error while computing MD5 hash for url " + url, e);
 		}
 
 		return digest;
 	}
 
-	public static void copyUrlToFile(URL url, File file) throws IOException, Hdf5NativeLibsException {
+	public static void copyUrlToFile(URL url, File file) throws IOException, ITKNativeLibsException {
 
 		BufferedInputStream is = new BufferedInputStream(url.openStream());
 		if (file.exists() && Arrays.equals(getDigest(url), getDigest(file.toURI().toURL()))) {
